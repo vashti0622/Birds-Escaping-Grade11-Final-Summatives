@@ -7,8 +7,6 @@ init()
 size = width, height = 600, 500
 screen = display.set_mode(size)
 
-# test
-
 # defining colours
 BLACK = (0, 0, 0)
 WHITE = (255, 255, 255)
