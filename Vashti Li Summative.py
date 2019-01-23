@@ -7,8 +7,6 @@ init()
 size = width, height = 600, 500
 screen = display.set_mode(size)
 
-# test
-
 # defining colours
 BLACK = (0, 0, 0)
 WHITE = (255, 255, 255)
@@ -141,16 +139,19 @@ def drawGame(cy, button):
     st = GAMESTATE # in drawGame, must be GAMESTATE
     screen.fill((BLACK))
     draw.rect(screen, GREY, (0, 50, 600, 400))
-    draw.rect(screen, WHITE, (300, cy ,20 ,35))
     #obstacles
-    for ex in range(0, 600):
-        ey1 = random.randint(0,200)
-        ey2 = ey1 + 50 + 300
-        ey3 = 450 - ey2
-        draw.rect(screen, BLACK,(ex, 50, 40, ey1))
-        draw.rect(screen, BLACK,(ex, ey2, 40, ey3))
+    ey1 = random.randint(0,200)
+    ey2 = ey1 + 50 + 220
+    ey3 = 450 - ey2 
+    for ex1 in range(600, 0, -1):
+        draw.rect(screen, BLACK,(ex1, 50, 40, ey1))
+        draw.rect(screen, BLACK,(ex1, ey2, 40, ey3))
+        time.wait(3)
+        display.flip()
+        draw.rect(screen, GREY, (0, 50, 600, 400))
         
-        
+    #character
+    draw.rect(screen, WHITE, (300, cy ,20 ,35))
     display.flip()
     return st  # return the state
 
@@ -175,6 +176,7 @@ myClock = time.Clock()
 state = MENUSTATE # assume menu is where we are starting
 button = mx = my = 0 # initialize button, and mouse x and y
 charactery = 415 #the position of y
+x = 100
 # Game Loop
 #introAnimation()
 while running: # do as long as running is true
@@ -200,6 +202,8 @@ while running: # do as long as running is true
             charactery = 415 #reset the position of the character
     elif state == GAMESTATE: # if on the game screen
         state = drawGame(charactery, button)
+        draw.rect(screen,BLACK,(x,100,400,10))
+        x += 1
         if KEY_DOWN == True:
             charactery += 10
         if KEY_UP == True:
