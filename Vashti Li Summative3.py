@@ -21,7 +21,7 @@ DARKGREY = (170, 169, 169)
 #font
 font1 = font.SysFont("Arial Black",50) 
 font2 = font.SysFont("Arial Black",30) 
-
+font3 = font.SysFont("Arial Black",14) 
 
 # states
 MENUSTATE = 0
@@ -126,6 +126,11 @@ def displayMenu(button, mouseX, mouseY):
     quitTitleRect = Rect(width//4 + (width//2 - quitSize[0])//2, height//2 + (height//8 - quitSize[1])//2, quitSize[0], quitSize[1])
     screen.blit(quitText, quitTitleRect)
 
+    #instruction
+    ins="Click up and down to let the bird jump, don't hit the black barriers!"
+    type_ins = font3.render(ins, True, BLACK)
+    screen.blit(type_ins, (50,400,400,100))
+  
     # check if button 1 has been pushed
     if button == 1:
         # checking if clicked in the play box
@@ -201,11 +206,11 @@ while running: # do as long as running is true
         dis1 = charactery - 50 - barriery
         dis2 = barriery + 50 + 150 - charactery - 20
         if dis1 < 0 and barrierx <=310 and barrierx >=270:
-            running = False
+            state = MENUSTATE
             #print (dis1)
             #print ("1")
         if dis2 < 0 and barrierx <=310 and barrierx >=270:
-            running = False
+            state = MENUSTATE
             #print (dis2)
             #print ("2")
         if barrierx <= 600:
