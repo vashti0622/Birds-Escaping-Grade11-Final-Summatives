@@ -2,10 +2,10 @@ from pygame import *
 import os
 import random
 os.environ['SDL_VIDEO_WINDOW_POS'] = "%d, %d" %(20, 40)
-
 init()
 size = width, height = 600, 500
 screen = display.set_mode(size)
+
 
 # defining colours
 BLACK = (0, 0, 0)
@@ -17,27 +17,29 @@ DARKYELLOW = (246, 205, 128)
 GREEN = (0, 255, 0)
 GREY = (220, 219, 219)
 DARKGREY = (170, 169, 169)
+
+
 font1 = font.SysFont("Arial Black",50) 
 font2 = font.SysFont("Arial Black",30) 
+
+
 # states
 MENUSTATE = 0
 GAMESTATE = 1
 QUITSTATE = 2
 
-#movment of the character
-CUP = True
-CDOWN = False
 
+#movment of the character
 KEY_DOWN = False
 KEY_UP = False
 
-
+#put this outside the main loop
 def introAnimation():
     screen.fill((BLACK))
     draw.rect(screen, GREY, (0, 50, 600, 400))
-    title1 = "click space button to jump"
+    title1 = "click up and down to jump"
     title2 = "the adventure of"
-    title3 = "ZOO"
+    title3 = "BIRD"
     title4 = "ESCAPE"
     
     #animation of title 1
@@ -95,6 +97,8 @@ def introAnimation():
     time.wait(2000)
 
 
+
+
 def displayMenu(button, mouseX, mouseY):
     st = MENUSTATE
     #display menu
@@ -135,48 +139,54 @@ def displayMenu(button, mouseX, mouseY):
     display.flip()
     return st  # return the state
 
+
+
+
 def drawGame(cy, button):
     st = GAMESTATE # in drawGame, must be GAMESTATE
     screen.fill((BLACK))
     draw.rect(screen, GREY, (0, 50, 600, 400))
-    #obstacles
-    ey1 = random.randint(0,200)
-    ey2 = ey1 + 50 + 220
-    ey3 = 450 - ey2 
-    for ex1 in range(600, 0, -1):
-        draw.rect(screen, BLACK,(ex1, 50, 40, ey1))
-        draw.rect(screen, BLACK,(ex1, ey2, 40, ey3))
+    
+    #character
+    draw.rect(screen, WHITE, (300, cy ,20 ,20))
+    
+    #barrier
+    y1 = random.randint(0,300)
+    for ex1 in range(600,0,-1):
+        draw.rect(screen, BLACK,(ex1, 50, 40, y1))
+        draw.rect(screen, BLACK,(ex1, (y1+50+150), 40, (450-50-150-y1)))
+        #50--the black gap on the top, 150--the gap for passing, 450--the lowest poiont
         time.wait(3)
         display.flip()
         draw.rect(screen, GREY, (0, 50, 600, 400))
-        
-    #character
-    draw.rect(screen, WHITE, (300, cy ,20 ,35))
-    display.flip()
-    return st  # return the state
+        draw.rect(screen, WHITE, (300, cy ,20 ,20))
+ 
+    display.flip()    
+    return st #return the state
 
-def moveC(cx, dir):
-    # check if circle is moving left
-    if dir == CIRCLELEFT:
-        cx -= 1  # if left, subtract 1 to x
-        if cx <= 0: # edge of screen check
-            dir = CIRCLERIGHT # change direction
-    else: # must be moving right
-        cx += 1 # if right, add 1 to x
-        if cx >= 800: # edge of the screen check
-            dir = CIRCLELEFT # change direction
-    return cx, dir # return new x and direction
-
-
-
-
+#ex1 = 600
+#def barriers():
+    #global ex1
+    
+    #list = []
+    #ey1 = random.randint(0,200)
+    #ey2 = ey1 + 50 + 220
+    #ey3 = 450 - ey2
+    #ex1 -= 1
+    #firstRect = Rect(ex1, 50, 40, ey1)
+    #secondRect = Rect(ex1, ey2, 40, ey3)
+    #list.append(firstRect)
+    #list.append(secondRect)
+    #return list 
 
 running = True # boolean to control game loop
 myClock = time.Clock()
 state = MENUSTATE # assume menu is where we are starting
 button = mx = my = 0 # initialize button, and mouse x and y
 charactery = 415 #the position of y
-x = 100
+#barrierList = barriers()
+
+
 # Game Loop
 #introAnimation()
 while running: # do as long as running is true
@@ -192,22 +202,27 @@ while running: # do as long as running is true
             if evnt.key == K_UP:
                 KEY_UP = True
         if evnt.type ==KEYUP:
-            if evnt.key == K_DOWN:
-                KEY_DOWN = False
+            #if evnt.key == K_DOWN:
+                #KEY_DOWN = False
             if evnt.key == K_UP:
-                KEY_UP == False
+                KEY_UP = False
+                
+                
     if state == MENUSTATE: # if on the menu
         state = displayMenu(button, mx, my) # draw menu
         if state == GAMESTATE:
-            charactery = 415 #reset the position of the character
+            charactery = 250 #reset the position of the character
+            
+            
     elif state == GAMESTATE: # if on the game screen
-        state = drawGame(charactery, button)
-        draw.rect(screen,BLACK,(x,100,400,10))
-        x += 1
+        state = drawGame(charactery, button) 
+        #cr = Rect(300, charactery,20,20)
+        #if cr.collidelist(barrierList) != -1:
+            #running = False        
         if KEY_DOWN == True:
-            charactery += 10
+            charactery += 3
         if KEY_UP == True:
-            charactery -= 4
+            charactery -= 10
 
     else: # check for an error
         running = False
