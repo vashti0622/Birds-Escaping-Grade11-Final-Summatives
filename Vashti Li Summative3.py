@@ -18,7 +18,7 @@ GREEN = (0, 255, 0)
 GREY = (220, 219, 219)
 DARKGREY = (170, 169, 169)
 
-
+#font
 font1 = font.SysFont("Arial Black",50) 
 font2 = font.SysFont("Arial Black",30) 
 
@@ -156,29 +156,17 @@ def drawGame(cy, button, bx, by):
     display.flip()    
     return st #return the state
 
-#ex1 = 600
-#def barriers():
-    #global ex1
-    
-    #list = []
-    #ey1 = random.randint(0,200)
-    #ey2 = ey1 + 50 + 220
-    #ey3 = 450 - ey2
-    #ex1 -= 1
-    #firstRect = Rect(ex1, 50, 40, ey1)
-    #secondRect = Rect(ex1, ey2, 40, ey3)
-    #list.append(firstRect)
-    #list.append(secondRect)
-    #return list 
+
+
 
 running = True # boolean to control game loop
 myClock = time.Clock()
-state = MENUSTATE # assume menu is where we are starting
+state = MENUSTATE # start from the menu state
 button = mx = my = 0 # initialize button, and mouse x and y
 charactery = 415 #the position of y
-barrierx = 600
-barriery = random.randint(0,300)
-#barrierList = barriers()
+barrierx = 600 #start poosition of the barrier
+barriery = random.randint(0,300) #randomly generate the height of the barrier
+
 
 
 # Game Loop
@@ -197,7 +185,7 @@ while running: # do as long as running is true
                 KEY_UP = True
         if evnt.type ==KEYUP:
             #if evnt.key == K_DOWN:
-                #KEY_DOWN = False
+                #KEY_DOWN = False    #comment out to create gravity
             if evnt.key == K_UP:
                 KEY_UP = False
                 
@@ -209,7 +197,17 @@ while running: # do as long as running is true
             
             
     elif state == GAMESTATE: # if on the game screen
-        state = drawGame(charactery, button, barrierx, barriery) 
+        state = drawGame(charactery, button, barrierx, barriery)
+        dis1 = charactery - 50 - barriery
+        dis2 = barriery + 50 + 150 - charactery - 20
+        if dis1 < 0 and barrierx <=310 and barrierx >=270:
+            running = False
+            #print (dis1)
+            #print ("1")
+        if dis2 < 0 and barrierx <=310 and barrierx >=270:
+            running = False
+            #print (dis2)
+            #print ("2")
         if barrierx <= 600:
             barrierx -= 1
         if barrierx == 0:
